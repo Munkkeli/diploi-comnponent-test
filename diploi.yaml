@@ -3,47 +3,20 @@ type: component
 name: Test Component
 description: A test component for Diploi.
 
-stages:
-  - name: Development
-    identifier: development
-  - name: Staging
-    identifier: staging
-  - name: Production
-    identifier: production
-
 contexts:
   - name: app
     identifier: app
-  - name: postgres
-    identifier: postgres
 
 parameterGroups:
-  - name: PostgreSQL Database
-    identifier: postgres
-    toggleable: true
-    description: Database connection info
+  - name: Test Component
+    identifier: testi-component
+    toggleable: false
+    description: Test Component info
     defaultValue: TRUE
     parameters:
-      - name: Host
-        identifier: POSTGRES_HOST
-        defaultValue: postgres
-        type: string
-      - name: Port
-        identifier: POSTGRES_PORT
-        defaultValue: 5432
-        type: integer
-      - name: User
-        identifier: POSTGRES_USER
-        defaultValue: postgres
-        type: string
-        contexts: label=postgres,label=app
-      - name: Password
-        identifier: POSTGRES_PASSWORD
-        defaultValue: postgres
-        type: secret
-      - name: Schema
-        identifier: POSTGRES_DB
-        defaultValue: todo
+      - name: String
+        identifier: TEST_STRING
+        defaultValue: test
         type: string
 
 environmentVariables:
@@ -52,14 +25,9 @@ environmentVariables:
     type: string
     contexts: label=app
 
-repositories:
-  - name: app
-    identifier: app
-    initialProjectRepositoryUrl: github.com/diploi/nextjs-postgresql-template-demo
-
 hosts:
-  - name: App
-    identifier: app
+  - name: Component
+    identifier: component
     urlFormat: '[label].[default-domain]'
 
 editors:
@@ -83,16 +51,10 @@ ssh:
     stages:
       - staging
 logs:
-  - identifier: www-log
-    name: Next.js Log
+  - identifier: component-log
+    name: Component Log
     labelSelector: app=app
-    command: tail -n 2000 -F /var/log/www.log
-
-actions:
-  - identifier: nextjs-restart
-    name: Restart Next.js
-    labelSelector: app=app
-    command: supervisord restart www
+    command: tail -n 2000 -F /var/log/component.log
 
 images:
   - identifier: app
@@ -112,12 +74,6 @@ storage:
     stages:
       - development
     sizeMiB: 6144
-  - identifier: postgres
-    stages:
-      - production
-      - staging
-      - development
-    sizeMiB: 4096
 
 status:
   url: http://app:3000/status
